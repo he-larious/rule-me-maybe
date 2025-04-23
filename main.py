@@ -84,6 +84,7 @@ def apriori_gen(prev_itemsets, k, L):
             Candidate k-itemsets.
     """
     Ck = set()
+    prev_itemsets = sorted(prev_itemsets)
 
     # Join step
     for L_p, L_q in combinations(prev_itemsets, 2):
@@ -97,24 +98,24 @@ def apriori_gen(prev_itemsets, k, L):
             Ck.add(candidate)
     
     # Prune step
-    for candidate in Ck:
+    for candidate in list(Ck):
         for subset in combinations(candidate, k - 1):
             if subset not in L[k - 1]:
                 Ck.remove(candidate)
+                break
 
     return Ck
 
 
 def main():
-    # NOTE: Toy example from chatgpt to test the code, delete later
+    # NOTE: Toy example from class, delete later
     transactions = [
-        ['milk', 'bread', 'butter'],
-        ['bread', 'butter'],
-        ['milk', 'bread'],
-        ['bread', 'butter', 'jam'],
-        ['milk', 'butter', 'jam']
+        ['pen', 'ink', 'diary', 'soap'],
+        ['pen', 'ink', 'diary'],
+        ['pen', 'diary'],
+        ['pen', 'ink', 'soap']
     ]
-    min_sup = 0.4
+    min_sup = 0.7
     frequent_itemsets = apriori(transactions, min_sup)
     
     for k, itemsets in frequent_itemsets.items():
