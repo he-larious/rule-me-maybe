@@ -87,6 +87,7 @@ def apriori_gen(prev_itemsets, k, L):
             Candidate k-itemsets.
     """
     Ck = set()
+
     prev_itemsets = sorted(prev_itemsets)
 
     # Join step
@@ -132,20 +133,7 @@ def validate_args():
 
 def parse_transactions(csv_file):
     df = pd.read_csv(csv_file)
-
-    # Replace each Y and N as a unique item name
-    df.loc[df["BRADH"] == "Y", "BRADH"] = "Y_BRADH"
-    df.loc[df["BRADH"] == "N", "BRADH"] = "N_BRADH"
-
-    df.loc[df["SRG_FLG"] == "Y", "SRG_FLG"] = "Y_SRG_FLG"
-    df.loc[df["SRG_FLG"] == "N", "SRG_FLG"] = "N_SRG_FLG"
-
-    df.loc[df["INFRACTION"] == "Y", "INFRACTION"] = "Y_INFRACTION"
-    df.loc[df["INFRACTION"] == "N", "INFRACTION"] = "N_INFRACTION"
-
-    # NOTE: do we need to change AGE to string?
-    # df["AGE"] = df["AGE"].apply(str)
-
+    
     transactions = df.values.tolist()
     return transactions
 
@@ -173,3 +161,30 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# update csv
+'''
+def update_csv(csv_file):
+    df = pd.read_csv(csv_file)
+
+    # Replace each Y and N as a unique item name
+    df.loc[df["BRADH"] == "Y", "BRADH"] = "Y_BRADH"
+    df.loc[df["BRADH"] == "N", "BRADH"] = "N_BRADH"
+
+    df.loc[df["SRG_FLG"] == "Y", "SRG_FLG"] = "Y_SRG_FLG"
+    df.loc[df["SRG_FLG"] == "N", "SRG_FLG"] = "N_SRG_FLG"
+
+    df.loc[df["INFRACTION"] == "Y", "INFRACTION"] = "Y_INFRACTION"
+    df.loc[df["INFRACTION"] == "N", "INFRACTION"] = "N_INFRACTION"
+
+    # Replace age with age group
+    bins = [18, 25, 35, 45, 55, 65, 75, 85, 95]
+    labels = ['18-25', '26-35', '36-45', '46-55', '56-65', '66-75', '76-85', '86-95']
+    df['AGE_RANGE'] = pd.cut(df['AGE'], bins=bins, labels=labels, include_lowest=True)
+    df = df.drop(columns=["AGE"])
+
+    df.to_csv("daily_inmates_2.csv")
+
+
+'''
