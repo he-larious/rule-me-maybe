@@ -1,5 +1,8 @@
 from itertools import combinations
 from collections import defaultdict
+import argparse
+import os
+import pandas as pd
 
 def apriori(transactions, min_sup):
     """
@@ -106,20 +109,50 @@ def apriori_gen(prev_itemsets, k, L):
 
     return Ck
 
+def check_csv_file(file_name):
+    if not os.path.isfile(file_name):
+        raise argparse.ArgumentTypeError("The CSV file must be in the INTEGRATED-DATASET in the directory.")
+    return file_name
+
+def check_threshold(t):
+    t = float(t)
+    if t < 0 or t > 1:
+        raise argparse.ArgumentTypeError("Threshold must be between 0 and 1.")
+    return t
+
+def validate_args():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("csv", type=check_csv_file, help="The CSV file containing the INTEGRATED-DATASET")
+    parser.add_argument("min_sup", type=check_threshold, help="Minimum support value between 0 and 1.")
+    parser.add_argument("min_conf", type=check_threshold, help="Minimum confidence value between 0 and 1.")
+
+    args = parser.parse_args()
+    return args
+
+def parse_transactions(csv_file):
+    df = pd.read_csv(csv_file)
+    transactions = df.values.tolist()
+    return transactions
 
 def main():
+    # Parse and validate all user input from args
+    args = validate_args()
+
+    transactions = parse_transactions(args.csv)
+
     # NOTE: Toy example from class, delete later
-    transactions = [
-        ['pen', 'ink', 'diary', 'soap'],
-        ['pen', 'ink', 'diary'],
-        ['pen', 'diary'],
-        ['pen', 'ink', 'soap']
-    ]
-    min_sup = 0.7
-    frequent_itemsets = apriori(transactions, min_sup)
+    # transactions = [
+    #     ['pen', 'ink', 'diary', 'soap'],
+    #     ['pen', 'ink', 'diary'],
+    #     ['pen', 'diary'],
+    #     ['pen', 'ink', 'soap']
+    # ]
+    # min_sup = 0.7
+    frequent_itemsets = apriori(transactions, args.min_sup)
     
     for k, itemsets in frequent_itemsets.items():
-        print(f"Frequent {k}-itemsets (support >= {min_sup}):")
+        print(f"Frequent {k}-itemsets (support >= {args.min_sup}):")
         for items, count in sorted(itemsets.items()):
             print(f"  {items}: {count}")
 
