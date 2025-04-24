@@ -132,6 +132,20 @@ def validate_args():
 
 def parse_transactions(csv_file):
     df = pd.read_csv(csv_file)
+
+    # Replace each Y and N as a unique item name
+    df.loc[df["BRADH"] == "Y", "BRADH"] = "Y_BRADH"
+    df.loc[df["BRADH"] == "N", "BRADH"] = "N_BRADH"
+
+    df.loc[df["SRG_FLG"] == "Y", "SRG_FLG"] = "Y_SRG_FLG"
+    df.loc[df["SRG_FLG"] == "N", "SRG_FLG"] = "N_SRG_FLG"
+
+    df.loc[df["INFRACTION"] == "Y", "INFRACTION"] = "Y_INFRACTION"
+    df.loc[df["INFRACTION"] == "N", "INFRACTION"] = "N_INFRACTION"
+
+    # NOTE: do we need to change AGE to string?
+    # df["AGE"] = df["AGE"].apply(str)
+
     transactions = df.values.tolist()
     return transactions
 
