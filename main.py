@@ -133,6 +133,7 @@ def validate_args():
 
 def parse_transactions(csv_file):
     df = pd.read_csv(csv_file)
+    df = df.astype(str)
     
     transactions = df.values.tolist()
     return transactions
