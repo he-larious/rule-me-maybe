@@ -148,13 +148,14 @@ def build_k_itemset_rules(k, itemsets, frequent_itemsets, min_conf):
 
         # for each element in tuple, move it the RHS
         l_itemset = list(itemset)
+        print(l_itemset)
         for i in range(len(l_itemset)):
             lhs = l_itemset[:i] + l_itemset[i+1:]
             rhs = l_itemset[i]
             denominator = frequent_itemsets[k-1][tuple(lhs)]
             conf = numerator/denominator
             if conf >= min_conf:
-                k_itemset_rules.append((lhs, rhs, conf))
+                k_itemset_rules.append((lhs, rhs, conf, numerator))
     return k_itemset_rules
 
 def build_high_conf_rules(frequent_itemsets, min_conf):
@@ -174,10 +175,6 @@ def build_high_conf_rules(frequent_itemsets, min_conf):
         
 
     return high_conf_rules
-    #     print(f"Frequent {k}-itemsets (support >= {args.min_sup}):")
-    #     for items, count in sorted(itemsets.items()):
-    #         print(f"  {items}: {count}")
-    # pass
 
     
 def main():
@@ -206,15 +203,15 @@ def main():
     with open("output.txt", "w") as f:
 
         # output frequent itemsets
-        f.write(f"==Frequent itemsets (min_sup={args.min_sup*100}%)")
+        f.write(f"==Frequent itemsets (min_sup={args.min_sup*100}%)\n")
         for _, itemsets in frequent_itemsets.items():
             for items, count in sorted(itemsets.items()):
-                f.write(f"{list(items)}, {round(count*100, 4)}%")
+                f.write(f"[{','.join(list(items))}], {round(count*100, 4)}%\n")
 
         # output high conf rules
-        f.write(f"==High-confidence association rules (min_conf={args.min_conf*100}%)")
+        f.write(f"==High-confidence association rules (min_conf={args.min_conf*100}%)\n")
         for rule in high_conf_rules:
-            print(f"{rule[0]}--> {rule[1]}: {rule[2]}")
+            f.write(f"[{','.join(rule[0])}] => [{rule[1]}] (Conf: {round(rule[2]*100, 4)}%, Supp: {round(rule[3]*100, 4)}%)\n")
 
 if __name__ == "__main__":
     main()
