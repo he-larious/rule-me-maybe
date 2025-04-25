@@ -138,6 +138,48 @@ def parse_transactions(csv_file):
     transactions = df.values.tolist()
     return transactions
 
+def build_k_itemset_rules(k, itemsets, frequent_itemsets, min_conf):
+    k_itemset_rules = []
+    # iterate over each k-itemset
+    for itemset, supp in itemsets.items():
+
+        # calc numerator = supp(LHS U RHS)
+        numerator = supp
+
+        # for each element in tuple, move it the RHS
+        l_itemset = list(itemset)
+        for i in range(len(l_itemset)):
+            lhs = l_itemset[:i] + l_itemset[i+1:]
+            rhs = l_itemset[i]
+            denominator = frequent_itemsets[k-1][tuple(lhs)]
+            conf = numerator/denominator
+            if conf >= min_conf:
+                k_itemset_rules.append((lhs, rhs, conf))
+    return k_itemset_rules
+
+def build_high_conf_rules(frequent_itemsets, min_conf):
+    high_conf_rules = []
+
+    for k, itemsets in frequent_itemsets.items():
+
+        # skip trivial rules
+        if k == 1:
+            continue
+        
+        # build rules for itemsets with k items
+        k_itemset_rules = build_k_itemset_rules(k, itemsets, frequent_itemsets, min_conf)
+
+        # add to list
+        high_conf_rules = high_conf_rules + k_itemset_rules
+        
+
+    return high_conf_rules
+    #     print(f"Frequent {k}-itemsets (support >= {args.min_sup}):")
+    #     for items, count in sorted(itemsets.items()):
+    #         print(f"  {items}: {count}")
+    # pass
+
+    
 def main():
     # Parse and validate all user input from args
     args = validate_args()
@@ -154,11 +196,25 @@ def main():
     # min_sup = 0.7
     frequent_itemsets = apriori(transactions, args.min_sup)
     
-    for k, itemsets in frequent_itemsets.items():
-        print(f"Frequent {k}-itemsets (support >= {args.min_sup}):")
-        for items, count in sorted(itemsets.items()):
-            print(f"  {items}: {count}")
+    # for k, itemsets in frequent_itemsets.items():
+    #     print(f"Frequent {k}-itemsets (support >= {args.min_sup}):")
+    #     for items, count in sorted(itemsets.items()):
+    #         print(f"  {items}: {count}")
 
+    high_conf_rules = build_high_conf_rules(frequent_itemsets, args.min_conf)
+
+    with open("output.txt", "w") as f:
+
+        # output frequent itemsets
+        f.write(f"==Frequent itemsets (min_sup={args.min_sup*100}%)")
+        for _, itemsets in frequent_itemsets.items():
+            for items, count in sorted(itemsets.items()):
+                f.write(f"{list(items)}, {round(count*100, 4)}%")
+
+        # output high conf rules
+        f.write(f"==High-confidence association rules (min_conf={args.min_conf*100}%)")
+        for rule in high_conf_rules:
+            print(f"{rule[0]}--> {rule[1]}: {rule[2]}")
 
 if __name__ == "__main__":
     main()
