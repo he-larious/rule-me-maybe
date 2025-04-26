@@ -139,6 +139,23 @@ def parse_transactions(csv_file):
     return transactions
 
 def build_k_itemset_rules(k, itemsets, frequent_itemsets, min_conf):
+    """
+    Returns high-confidence association rules for frequent itemsets of size k.
+    
+    Args:
+        k (int):
+            The size of the frequent itemsets.
+        itemsets (List[List[]]):
+            A dictionary of that maps an itemset to its support.
+        frequent_itemsets (List[List[]]):
+            All the itemsets that meet the minimum support threshold.
+        min_conf (float):
+            The minimum confidence threshold as a fraction between 0 and 1.
+        
+    Returns:
+        List[Tuple]:
+            A list of 4-tuples containing the LHS, RHS, confidence, and support of high-confidence rules.
+    """
     k_itemset_rules = []
     # iterate over each k-itemset
     for itemset, supp in itemsets.items():
@@ -159,6 +176,19 @@ def build_k_itemset_rules(k, itemsets, frequent_itemsets, min_conf):
     return k_itemset_rules
 
 def build_high_conf_rules(frequent_itemsets, min_conf):
+    """
+    Returns all the possible association rules that meet the minimum confidence threshold.
+    
+    Args:
+        frequent_itemsets (List[List[]]):
+            All the itemsets that meet the minimum support threshold.
+        min_conf (float):
+            The minimum confidence threshold as a fraction between 0 and 1.
+        
+    Returns:
+        List[Tuple]:
+            A list of 4-tuples containing the LHS, RHS, confidence, and support of high-confidence rules.
+    """
     high_conf_rules = []
 
     for k, itemsets in frequent_itemsets.items():
