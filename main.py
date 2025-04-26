@@ -209,6 +209,7 @@ def main():
         for rule in high_conf_rules:
             f.write(f"[{','.join(rule[0])}] => [{rule[1]}] (Conf: {round(rule[2]*100, 4)}%, Supp: {round(rule[3]*100, 4)}%)\n")
 
+
 if __name__ == "__main__":
     main()
 
@@ -237,14 +238,14 @@ def update_csv(csv_file):
     df.loc[df["RACE"] == "I", "RACE"] = "AMERICAN INDIAN"
     df.loc[df["RACE"] == "U", "RACE"] = "UNKNOWN"
 
-
     # Replace age with age group
     bins = [18, 25, 35, 45, 55, 65, 75, 85, 95]
     labels = ['18-25', '26-35', '36-45', '46-55', '56-65', '66-75', '76-85', '86-95']
     df['AGE_RANGE'] = pd.cut(df['AGE'], bins=bins, labels=labels, include_lowest=True)
-    df = df.drop(columns=["AGE"])
 
-    df.to_csv("daily_inmates_3.csv")
+    df = df.drop(columns=["GENDER", "INMATEID", "DISCHARGED_DT", "SEALED", "AGE"])
+
+    df.to_csv("daily_inmates_no_gender.csv", index=False)
 '''
 
 
