@@ -198,9 +198,38 @@ def main():
         f.write(f"==High-confidence association rules (min_conf={args.min_conf*100}%)\n")
         for rule in high_conf_rules:
             f.write(f"[{','.join(rule[0])}] => [{rule[1]}] (Conf: {round(rule[2]*100, 4)}%, Supp: {round(rule[3]*100, 4)}%)\n")
+def update_csv(csv_file):
+    df = pd.read_csv(csv_file)
 
+    # Replace each Y and N as a unique item name
+    df.loc[df["BRADH"] == "Y", "BRADH"] = "Y_MENTAL_OBSV"
+    df.loc[df["BRADH"] == "N", "BRADH"] = "N_MENTAL_OBSV"
+
+    df.loc[df["SRG_FLG"] == "Y", "SRG_FLG"] = "Y_GANG"
+    df.loc[df["SRG_FLG"] == "N", "SRG_FLG"] = "N_GANG"
+
+    df.loc[df["INFRACTION"] == "Y", "INFRACTION"] = "Y_INFRACTION"
+    df.loc[df["INFRACTION"] == "N", "INFRACTION"] = "N_INFRACTION"
+
+    # Write out the race
+    df.loc[df["RACE"] == "B", "RACE"] = "BLACK"
+    df.loc[df["RACE"] == "W", "RACE"] = "WHITE"
+    df.loc[df["RACE"] == "O", "RACE"] = "OTHER"
+    df.loc[df["RACE"] == "A", "RACE"] = "ASIAN"
+    df.loc[df["RACE"] == "I", "RACE"] = "AMERICAN INDIAN"
+    df.loc[df["RACE"] == "U", "RACE"] = "UNKNOWN"
+
+
+    # Replace age with age group
+    bins = [18, 25, 35, 45, 55, 65, 75, 85, 95]
+    labels = ['18-25', '26-35', '36-45', '46-55', '56-65', '66-75', '76-85', '86-95']
+    df['AGE_RANGE'] = pd.cut(df['AGE'], bins=bins, labels=labels, include_lowest=True)
+    df = df.drop(columns=["AGE"])
+
+    df.to_csv("daily_inmates_3.csv")
 if __name__ == "__main__":
-    main()
+    # main()
+    update_csv("daily_inmates.csv")
 
 
 # update csv
@@ -209,14 +238,20 @@ def update_csv(csv_file):
     df = pd.read_csv(csv_file)
 
     # Replace each Y and N as a unique item name
-    df.loc[df["BRADH"] == "Y", "BRADH"] = "Y_BRADH"
-    df.loc[df["BRADH"] == "N", "BRADH"] = "N_BRADH"
+    df.loc[df["BRADH"] == "Y", "BRADH"] = "Y_MENTAL_OBSV"
+    df.loc[df["BRADH"] == "N", "BRADH"] = "N_MENTAL_OBSV"
 
-    df.loc[df["SRG_FLG"] == "Y", "SRG_FLG"] = "Y_SRG_FLG"
-    df.loc[df["SRG_FLG"] == "N", "SRG_FLG"] = "N_SRG_FLG"
+    df.loc[df["SRG_FLG"] == "Y", "SRG_FLG"] = "Y_GANG"
+    df.loc[df["SRG_FLG"] == "N", "SRG_FLG"] = "N_GANG"
 
     df.loc[df["INFRACTION"] == "Y", "INFRACTION"] = "Y_INFRACTION"
     df.loc[df["INFRACTION"] == "N", "INFRACTION"] = "N_INFRACTION"
+
+    # Write out the race
+    df.loc[df["RACE"] == "B", "RACE"] = "BLACK"
+    df.loc[df["RACE"] == "W", "RACE"] = "WHITE"
+    df.loc[df["RACE"] == "O", "RACE"] = "OTHER"
+
 
     # Replace age with age group
     bins = [18, 25, 35, 45, 55, 65, 75, 85, 95]
@@ -224,7 +259,7 @@ def update_csv(csv_file):
     df['AGE_RANGE'] = pd.cut(df['AGE'], bins=bins, labels=labels, include_lowest=True)
     df = df.drop(columns=["AGE"])
 
-    df.to_csv("daily_inmates_2.csv")
-
-
+    df.to_csv("daily_inmates_3.csv")
 '''
+
+
