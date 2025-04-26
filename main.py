@@ -10,9 +10,9 @@ def apriori(transactions, min_sup):
     
     Args:
         transactions (List[List[]]): 
-            The dataset of transactions (each transaction is a list of items).
+            The dataset of transactions.
         min_sup (int): 
-            The minimum support threshold as a fraction between 0 and 1..
+            The minimum support threshold as a fraction between 0 and 1.
         
     Returns:
         Dict[int, Dict[Tuple(), float]]: 
@@ -76,11 +76,11 @@ def apriori_gen(prev_itemsets, k, L):
 
     Args:
         prev_itemsets (List[Tuple()]): 
-            List of frequent (k-1)-itemsets (tuples sorted lexically).
+            List of frequent (k-1)-itemsets.
         k (int): 
             Size of candidates to generate.
         L (Dict[int, Dict[Tuple(), float]]): 
-            A mapping from itemset size to the dictionary of frequent itemsets of that size
+            A mapping from itemset size to the dictionary of frequent itemsets of that size.
 
     Returns:
         Set[Tuple()]: 
@@ -148,7 +148,7 @@ def build_k_itemset_rules(k, itemsets, frequent_itemsets, min_conf):
 
         # for each element in tuple, move it the RHS
         l_itemset = list(itemset)
-        print(l_itemset)
+
         for i in range(len(l_itemset)):
             lhs = l_itemset[:i] + l_itemset[i+1:]
             rhs = l_itemset[i]
@@ -183,21 +183,7 @@ def main():
 
     transactions = parse_transactions(args.csv)
 
-    # NOTE: Toy example from class, delete later
-    # transactions = [
-    #     ['pen', 'ink', 'diary', 'soap'],
-    #     ['pen', 'ink', 'diary'],
-    #     ['pen', 'diary'],
-    #     ['pen', 'ink', 'soap']
-    # ]
-    # min_sup = 0.7
     frequent_itemsets = apriori(transactions, args.min_sup)
-    
-    # for k, itemsets in frequent_itemsets.items():
-    #     print(f"Frequent {k}-itemsets (support >= {args.min_sup}):")
-    #     for items, count in sorted(itemsets.items()):
-    #         print(f"  {items}: {count}")
-
     high_conf_rules = build_high_conf_rules(frequent_itemsets, args.min_conf)
 
     with open("output.txt", "w") as f:
