@@ -59,7 +59,7 @@ These results are compelling because we can gain insight on the state of inmates
 For example, one compelling rule we see is: <br>
 [130.35] => [MED] (Conf: 80.2083%, Supp: 1.0505%)
 
-The number 130.35 refers to the New York Penal Law § 130.35, which describes rape in the first degree. This rule indicates that inmate with a rape charge against them are placed in medium custody. Intuitively, this reveals that correctional systems often reserve maximum level custody for the highest risk inmates and minimum for low risk ones. Medium custody is designed for individuals who pose a serious risk but who aren't considered the very highest flight or violence risk.
+The number 130.35 refers to the New York Penal Law § 130.35, which describes rape in the first degree. This rule indicates that inmates with a rape charge against them are placed in medium custody. Intuitively, this reveals that correctional systems often reserve maximum level custody for the highest risk inmates and minimum for low risk ones. Medium custody is designed for individuals who pose a serious risk but who aren't considered the very highest flight or violence risk.
 
 Another interesting rule we see is: <br>
 [120.05,N_GANG,N_INFRACTION] => [Y_MENTAL_OBSV] (Conf: 70.1389%, Supp: 2.7558%)
