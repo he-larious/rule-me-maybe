@@ -186,13 +186,23 @@ def main():
     frequent_itemsets = apriori(transactions, args.min_sup)
     high_conf_rules = build_high_conf_rules(frequent_itemsets, args.min_conf)
 
+    # Sort frequent itemsets by support
+    sorted_freq_itemsets = [
+        (itemset, support)
+        for size, d in frequent_itemsets.items()
+        for itemset, support in d.items()
+    ]
+    sorted_freq_itemsets = sorted(sorted_freq_itemsets, key=lambda x: x[1], reverse=True)
+
+    # Sort association rules by confidence
+    high_conf_rules = sorted(high_conf_rules, key=lambda rule: rule[2], reverse=True)
+
     with open("output.txt", "w") as f:
 
         # output frequent itemsets
         f.write(f"==Frequent itemsets (min_sup={args.min_sup*100}%)\n")
-        for _, itemsets in frequent_itemsets.items():
-            for items, count in sorted(itemsets.items()):
-                f.write(f"[{','.join(list(items))}], {round(count*100, 4)}%\n")
+        for itemsets, support in sorted_freq_itemsets:
+            f.write(f"[{','.join(list(itemsets))}], {round(support*100, 4)}%\n")
 
         # output high conf rules
         f.write(f"==High-confidence association rules (min_conf={args.min_conf*100}%)\n")
