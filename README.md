@@ -49,3 +49,8 @@ Finally, we output only the association rules that meet the min_conf threshold.
 
 
 ## Compelling Sample Run
+Run this command to see a compelling sample run:
+```
+python3 main.py daily_inmates.csv 0.01 0.7
+```
+
