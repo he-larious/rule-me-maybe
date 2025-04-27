@@ -2,20 +2,22 @@
 COMS 6111 Project 3
 
 ## Group
-Helena He (hh3090) <br>
+Helena He (hh3090) 
+<br>
 Kristine Pham (klp2157)
 
 ## Files
 - main.py
-- requirements.txt
 - daily_inmates.csv
 - example-run.txt
 - README.md
 
 ## To Run the Program
-To install all packages needed to run the program, use this command:
+NOTE: The Google Cloud VM we used for this project is the same as the one we used for Project 2.
+
+To install all packages needed to run the program, use this command to install numpy and pandas:
 ```
-pip3 install -r requirements.txt
+pip install numpy pandas
 ```
 
 To run the program, use this command:
