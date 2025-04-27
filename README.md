@@ -34,6 +34,7 @@ python3 main.py daily_inmates.csv <min_sup> <min_conf>
 The apriori algorithm is used to generate all frequent itemsets. There are two functions used for this, `apriori` and `apriori_gen`. These are implemented using the pseudocode given in Section 2.1 of the Agrawal and Srikant paper in VLDB 1994. 
 
 The following happens when the `apriori` function is called:
+
 1. Scan the transactions once to build frequent 1-itemsets that meet min_sup. 
 2. Repeat for k = 2, 3, … until no new frequent itemsets appear:
     - Join step: take every pair of frequent (k–1)-itemsets that share their first k–2 items and merge them into a sorted k-tuple.
