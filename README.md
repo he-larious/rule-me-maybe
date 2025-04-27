@@ -17,7 +17,7 @@ NOTE: The Google Cloud VM we used for this project is the same as the one we use
 
 To install all packages needed to run the program, use this command to install numpy and pandas:
 ```
-pip install numpy pandas
+pip3 install numpy pandas
 ```
 
 To run the program, use this command:
